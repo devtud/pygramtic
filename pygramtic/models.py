@@ -349,6 +349,9 @@ class Document(BaseModel):
     file_size: int = None
 
 
+Document.update_forward_refs()
+
+
 class User(BaseModel):
     id: int
     is_bot: bool
