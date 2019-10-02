@@ -10,12 +10,36 @@ from pydantic import BaseModel, Schema
 InputFile = TypeVar('InputFile', io.BytesIO, io.FileIO, str)
 
 
+class LoginUrl(BaseModel):
+    """
+    This object represents a parameter of the inline keyboard button used to automatically authorize a user.
+    Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram.
+    All the user needs to do is tap/click a button and confirm that they want to log in.
+    https://core.telegram.org/bots/api#loginurl
+    """
+    url: str = None
+    forward_text: str = None
+    bot_username: str = None
+    request_write_access: bool = None
+
+
+LoginUrl.update_forward_refs()
+
+
+class CallbackGame(BaseModel):
+    """
+    A placeholder, currently holds no information. Use BotFather to set up your game.
+    https://core.telegram.org/bots/api#callbackgame
+    """
+    pass
+
+
 class InlineKeyboardButton(BaseModel):
     """
     This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
     https://core.telegram.org/bots/api#inlinekeyboardbutton
     """
-    text: str = None
+    text: str
     url: str = None
     login_url: 'LoginUrl' = None
     callback_data: str = None
@@ -26,9 +50,7 @@ class InlineKeyboardButton(BaseModel):
 
     def __init__(self, text: str,
                  url: str = None,
-                 login_url
-
-                 : 'LoginUrl' = None,
+                 login_url: 'LoginUrl' = None,
                  callback_data: str = None,
                  switch_inline_query: str = None,
                  switch_inline_query_current_chat: str = None,
@@ -42,6 +64,9 @@ class InlineKeyboardButton(BaseModel):
                                                    switch_inline_query_current_chat=switch_inline_query_current_chat,
                                                    callback_game=callback_game,
                                                    pay=pay, **kwargs)
+
+
+InlineKeyboardButton.update_forward_refs()
 
 
 class InlineKeyboardMarkup(BaseModel):
@@ -116,6 +141,9 @@ class InlineKeyboardMarkup(BaseModel):
         return self
 
 
+InlineKeyboardMarkup.update_forward_refs()
+
+
 class PollOption(BaseModel):
     text: str = None
     voter_count: int = None
@@ -126,6 +154,9 @@ class Poll(BaseModel):
     question: str = None
     options: List['PollOption'] = []
     is_closed: bool = None
+
+
+Poll.update_forward_refs()
 
 
 class PassportFile(BaseModel):
@@ -156,6 +187,9 @@ class EncryptedPassportElement(BaseModel):
     selfie: 'PassportFile' = None
 
 
+EncryptedPassportElement.update_forward_refs()
+
+
 class EncryptedCredentials(BaseModel):
     """
     Contains data required for decrypting and authenticating EncryptedPassportElement.
@@ -169,6 +203,9 @@ class EncryptedCredentials(BaseModel):
     secret: str = None
 
 
+EncryptedCredentials.update_forward_refs()
+
+
 class PassportData(BaseModel):
     """
     Contains information about Telegram Passport data shared with the bot by the user.
@@ -177,6 +214,39 @@ class PassportData(BaseModel):
 
     data: List['EncryptedPassportElement'] = None
     credentials: 'EncryptedCredentials' = None
+
+
+PassportData.update_forward_refs()
+
+
+class ShippingAddress(BaseModel):
+    """
+    This object represents a shipping address.
+    https://core.telegram.org/bots/api#shippingaddress
+    """
+    country_code: str = None
+    state: str = None
+    city: str = None
+    street_line1: str = None
+    street_line2: str = None
+    post_code: str = None
+
+
+ShippingAddress.update_forward_refs()
+
+
+class OrderInfo(BaseModel):
+    """
+    This object represents information about an order.
+    https://core.telegram.org/bots/api#orderinfo
+    """
+    name: str = None
+    phone_number: str = None
+    email: str = None
+    shipping_address: 'ShippingAddress' = None
+
+
+OrderInfo.update_forward_refs()
 
 
 class SuccessfulPayment(BaseModel):
@@ -193,6 +263,9 @@ class SuccessfulPayment(BaseModel):
     provider_payment_charge_id: str = None
 
 
+SuccessfulPayment.update_forward_refs()
+
+
 class Invoice(BaseModel):
     """
     This object contains basic information about an invoice.
@@ -205,6 +278,9 @@ class Invoice(BaseModel):
     total_amount: int = None
 
 
+Invoice.update_forward_refs()
+
+
 class Location(BaseModel):
     """
     This object represents a point on the map.
@@ -212,6 +288,9 @@ class Location(BaseModel):
     """
     longitude: float = None
     latitude: float = None
+
+
+Location.update_forward_refs()
 
 
 class Venue(BaseModel):
@@ -224,6 +303,9 @@ class Venue(BaseModel):
     address: str = None
     foursquare_id: str = None
     foursquare_type: str = None
+
+
+Venue.update_forward_refs()
 
 
 class Contact(BaseModel):
@@ -245,6 +327,9 @@ class Contact(BaseModel):
         return name
 
 
+Contact.update_forward_refs()
+
+
 class Voice(BaseModel):
     """
     This object represents a voice note.
@@ -256,6 +341,9 @@ class Voice(BaseModel):
     file_size: int = None
 
 
+Voice.update_forward_refs()
+
+
 class PhotoSize(BaseModel):
     """
     This object represents one size of a photo or a file / sticker thumbnail.
@@ -265,6 +353,9 @@ class PhotoSize(BaseModel):
     width: int = None
     height: int = None
     file_size: int = None
+
+
+PhotoSize.update_forward_refs()
 
 
 class VideoNote(BaseModel):
@@ -279,6 +370,9 @@ class VideoNote(BaseModel):
     file_size: int = None
 
 
+VideoNote.update_forward_refs()
+
+
 class Video(BaseModel):
     """
     This object represents a video file.
@@ -291,6 +385,23 @@ class Video(BaseModel):
     thumb: 'PhotoSize' = None
     mime_type: str = None
     file_size: int = None
+
+
+Video.update_forward_refs()
+
+
+class MaskPosition(BaseModel):
+    """
+    This object describes the position on faces where a mask should be placed by default.
+    https://core.telegram.org/bots/api#maskposition
+    """
+    point: str = None
+    x_shift: float = None
+    y_shift: float = None
+    scale: float = None
+
+
+MaskPosition.update_forward_refs()
 
 
 class Sticker(BaseModel):
@@ -308,6 +419,9 @@ class Sticker(BaseModel):
     file_size: int = None
 
 
+Sticker.update_forward_refs()
+
+
 class Audio(BaseModel):
     """
     This object represents an audio file to be treated as music by the Telegram clients.
@@ -320,6 +434,9 @@ class Audio(BaseModel):
     mime_type: str = None
     file_size: int = None
     thumb: 'PhotoSize' = None
+
+
+Audio.update_forward_refs()
 
 
 class Animation(BaseModel):
@@ -335,6 +452,9 @@ class Animation(BaseModel):
     file_name: str = None
     mime_type: str = None
     file_size: int = None
+
+
+Animation.update_forward_refs()
 
 
 class Document(BaseModel):
@@ -364,30 +484,6 @@ class User(BaseModel):
 User.update_forward_refs()
 
 
-class ShippingAddress(BaseModel):
-    """
-    This object represents a shipping address.
-    https://core.telegram.org/bots/api#shippingaddress
-    """
-    country_code: str = None
-    state: str = None
-    city: str = None
-    street_line1: str = None
-    street_line2: str = None
-    post_code: str = None
-
-
-class OrderInfo(BaseModel):
-    """
-    This object represents information about an order.
-    https://core.telegram.org/bots/api#orderinfo
-    """
-    name: str = None
-    phone_number: str = None
-    email: str = None
-    shipping_address: 'ShippingAddress' = None
-
-
 class PreCheckoutQuery(BaseModel):
     """
     This object contains information about an incoming pre-checkout query.
@@ -407,6 +503,9 @@ class PreCheckoutQuery(BaseModel):
     order_info: 'OrderInfo' = None
 
 
+PreCheckoutQuery.update_forward_refs()
+
+
 class ShippingQuery(BaseModel):
     """
     This object contains information about an incoming shipping query.
@@ -416,6 +515,9 @@ class ShippingQuery(BaseModel):
     from_user: 'User' = None
     invoice_payload: str = None
     shipping_address: 'ShippingAddress' = None
+
+
+ShippingQuery.update_forward_refs()
 
 
 class ShippingOption(BaseModel):
@@ -444,6 +546,9 @@ class ChosenInlineResult(BaseModel):
     query: str = None
 
 
+ChosenInlineResult.update_forward_refs()
+
+
 class InlineQuery(BaseModel):
     """
     This object represents an incoming inline query.
@@ -456,47 +561,8 @@ class InlineQuery(BaseModel):
     query: str = None
     offset: str = None
 
-    async def answer(self,
-                     results: List['InlineQueryResult'],
-                     cache_time: Union[int, None] = None,
-                     is_personal: Union[bool, None] = None,
-                     next_offset: Union[str, None] = None,
-                     switch_pm_text: Union[str, None] = None,
-                     switch_pm_parameter: Union[str, None] = None):
-        """
-        Use this method to send answers to an inline query.
-        No more than 50 results per query are allowed.
-        Source: 'https'://core.telegram.org/bots/api#answerinlinequery
-        :param results: 'A' JSON-serialized array of results for the inline query
-        :type results: ':'obj:`List[types.InlineQueryResult]`
-        :param cache_time: 'The' maximum amount of time in seconds that the result of the
-            inline query may be cached on the server. Defaults to 300.
-        :type cache_time: ':'obj:`Union[int, None]`
-        :param is_personal: 'Pass' True, if results may be cached on the server side only
-            for the user that sent the query. By default, results may be returned to any user who sends the same query
-        :type is_personal: ':'obj:`Union[bool, None]`
-        :param next_offset: 'Pass' the offset that a client should send in the
-            next query with the same text to receive more results.
-            Pass an empty string if there are no more results or if you don‘t support pagination.
-            Offset length can’t exceed 64 bytes.
-        :type next_offset: ':'obj:`Union[str, None]`
-        :param switch_pm_text: 'If' passed, clients will display a button with specified text that
-            switches the user to a private chat with the bot and sends the bot a start message
-            with the parameter switch_pm_parameter
-        :type switch_pm_text: ':'obj:`Union[str, None]`
-        :param switch_pm_parameter: 'Deep'-linking parameter for the /start message sent to the bot when
-            user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
-        :type switch_pm_parameter: ':'obj:`Union[str, None]`
-        :return: 'On' success, True is returned
-        :rtype: ':'obj:`bool`
-        """
-        return await self.bot.answer_inline_query(self.id,
-                                                  results=results,
-                                                  cache_time=cache_time,
-                                                  is_personal=is_personal,
-                                                  next_offset=next_offset,
-                                                  switch_pm_text=switch_pm_text,
-                                                  switch_pm_parameter=switch_pm_parameter)
+
+InlineQuery.update_forward_refs()
 
 
 class ChatActions(str, Enum):
@@ -621,7 +687,7 @@ class Message(BaseModel):  # Checked
     forward_signature: str = None
     forward_sender_name: str = None
     forward_date: datetime.datetime = None
-    reply_to_message: 'Message' = None  # TODO make this Message
+    reply_to_message: 'Message' = None
     edit_date: datetime.datetime = None
     media_group_id: str = None
     author_signature: str = None
@@ -642,7 +708,7 @@ class Message(BaseModel):  # Checked
     location: 'Location' = None
     venue: 'Venue' = None
     poll: 'Poll' = None
-    new_chat_members: List[User] = []
+    new_chat_members: List['User'] = []
     left_chat_member: 'User' = None
     new_chat_title: str = None
     new_chat_photo: List['PhotoSize'] = []
@@ -680,6 +746,9 @@ class CallbackQuery(BaseModel):
     chat_instance: str = None
     data: str = None
     game_short_name: str = None
+
+
+CallbackQuery.update_forward_refs()
 
 
 class Update(BaseModel):
@@ -895,30 +964,6 @@ class PassportElementErrorSelfie(PassportElementError):
                                                          message=message)
 
 
-class MaskPosition(BaseModel):
-    """
-    This object describes the position on faces where a mask should be placed by default.
-    https://core.telegram.org/bots/api#maskposition
-    """
-    point: str = None
-    x_shift: float = None
-    y_shift: float = None
-    scale: float = None
-
-
-class LoginUrl(BaseModel):
-    """
-    This object represents a parameter of the inline keyboard button used to automatically authorize a user.
-    Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram.
-    All the user needs to do is tap/click a button and confirm that they want to log in.
-    https://core.telegram.org/bots/api#loginurl
-    """
-    url: str = None
-    forward_text: str = None
-    bot_username: str = None
-    request_write_access: bool = None
-
-
 class LabeledPrice(BaseModel):
     """
     This object represents a portion of the price for goods or services.
@@ -980,22 +1025,6 @@ class InputTextMessageContent(InputMessageContent):
     message_text: str = None
     parse_mode: str = None
     disable_web_page_preview: bool = None
-
-    def safe_get_parse_mode(self):
-        try:
-            return self.bot.parse_mode
-        except RuntimeError:
-            pass
-
-    def __init__(self, message_text: Optional[str] = None,
-                 parse_mode: Optional[str] = None,
-                 disable_web_page_preview: Optional[bool] = None):
-        if parse_mode is None:
-            parse_mode = self.safe_get_parse_mode()
-
-        super(InputTextMessageContent, self).__init__(message_text=message_text,
-                                                      parse_mode=parse_mode,
-                                                      disable_web_page_preview=disable_web_page_preview)
 
 
 class InputVenueMessageContent(InputMessageContent):
@@ -1781,14 +1810,6 @@ class ChatMemberStatus(str, Enum):
     @classmethod
     def is_chat_member(cls, role):
         return role in [cls.MEMBER, cls.ADMINISTRATOR, cls.CREATOR]
-
-
-class CallbackGame(BaseModel):
-    """
-    A placeholder, currently holds no information. Use BotFather to set up your game.
-    https://core.telegram.org/bots/api#callbackgame
-    """
-    pass
 
 
 class AuthWidgetData(BaseModel):
