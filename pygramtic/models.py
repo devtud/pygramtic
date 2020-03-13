@@ -1068,6 +1068,9 @@ class InputMedia(BaseModel):
     caption: str = None
     parse_mode: bool = None
 
+    class Config:
+        arbitrary_types_allowed = True
+
 
 class InputMediaAnimation(InputMedia):
     """
