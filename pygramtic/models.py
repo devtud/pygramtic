@@ -1790,10 +1790,10 @@ class ChatMember(BaseModel):
     can_add_web_page_previews: bool = None
 
     def is_chat_admin(self):
-        return ChatMemberStatus.is_admin(self.status)
+        return ChatMemberStatus.is_chat_admin(self.status)
 
     def is_chat_member(self):
-        return ChatMemberStatus.is_member(self.status)
+        return ChatMemberStatus.is_chat_member(self.status)
 
     def __int__(self):
         return self.user.id
