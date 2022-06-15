@@ -5,7 +5,7 @@ import io
 from enum import Enum
 from typing import List, Optional, Union, TypeVar, Any
 
-from pydantic import BaseModel, Schema
+from pydantic import BaseModel, Field
 
 InputFile = TypeVar('InputFile', io.BytesIO, io.FileIO, str)
 
@@ -678,7 +678,7 @@ Game.update_forward_refs()
 
 class Message(BaseModel):  # Checked
     message_id: int
-    from_user: 'User' = Schema(None, alias='from')
+    from_user: 'User' = Field(None, alias='from')
     date: datetime.datetime
     chat: 'Chat'
     forward_from: 'User' = None
@@ -1064,7 +1064,7 @@ class InputMedia(BaseModel):
     """
     type: str = None
     media: str = None
-    thumb: Union[InputFile, str] = Schema(None, alias='thumb')
+    thumb: Union[InputFile, str] = None
     caption: str = None
     parse_mode: bool = None
 
